@@ -1,0 +1,10 @@
+libzbar 0.10 for iOS (arm-apple-darwin)
+
+video and PDF417 is not (yet) supported
+
+Edit src/Makefile as needed, build using "make"
+
+Enjoy!
+
+--H2CO3
+
