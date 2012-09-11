@@ -1,16 +1,17 @@
 NAME = zbar
 VERSION = 0.10
 
-CC = arm-apple-darwin-gcc
-CXX = arm-apple-darwin-g++
+CC = arm-apple-darwin9-gcc
+CXX = arm-apple-darwin9-g++
 LD = $(CC) # if C++ code is to be linked, change to $(CXX)
-CFLAGS = -c -Wall -Wno-parentheses -I. -I.. -I../.. -Iinclude -I../include -I../../include
-CXXFLAGS = -c -Wall -Wno-parentheses -I. -I.. -I../.. -Iinclude -I../include -I../../include -I/usr/arm-apple-darwin/usr/include/c++/4.2.1 -I/usr/arm-apple-darwin/usr/include/c++/4.2.1/armv6-apple-darwin10
-LDFLAGS = -w -dynamiclib -ljpeg -liconv
+CFLAGS = -isysroot /var/mobile/sysroot -c -Wall -Wno-parentheses -I. -I.. -I../.. -Iinclude -I../include -I../../include
+CXXFLAGS = -isysroot /var/mobile/sysroot -c -Wall -Wno-parentheses -I. -I.. -I../.. -Iinclude -I../include -I../../include
+LDFLAGS = -isysroot /var/mobile/sysroot -w -dynamiclib -ljpeg -liconv -lobjc -framework Foundation -framework CoreGraphics
 
 TARGET_TRUE = lib$(NAME).$(VERSION).dylib
 TARGET = lib$(NAME).dylib
 OBJECTS = $(patsubst %.c, %.o, $(wildcard *.c decoder/*.c processor/*.c qrcode/*.c video/*.c window/*.c))
+OBJECTS += $(patsubst %.m, %.o, $(wildcard objc/*.m))
 
 all: $(TARGET)
 
@@ -29,3 +30,5 @@ $(TARGET_TRUE): $(OBJECTS)
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -o $@ $<
 
+%.o: %.m
+	$(CC) $(CFLAGS) -o $@ $<
